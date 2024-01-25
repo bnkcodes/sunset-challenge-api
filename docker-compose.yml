@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  app:
+    build: .
+    container_name: app_nestjs
+    tty: true
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgresql
+    networks:
+      - app-network
+
+  postgresql:
+    image: bitnami/postgresql:latest
+    container_name: postgresql
+    ports:
+      - "5432:5432"
+    tty: true
+    environment:
+      - POSTGRESQL_USERNAME=root
+      - POSTGRESQL_PASSWORD=root
+      - POSTGRESQL_DATABASE=development
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

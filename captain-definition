@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 2,
+  "dockerfileLines": [
+    "FROM node:16.17.1-alpine",
+    "ARG DATABASE_URL",
+    "ARG CAPROVER_GIT_COMMIT_SHA",
+    "ENV DATABASE_URL ${DATABASE_URL}",
+    "ENV CAPROVER_GIT_COMMIT_SHA ${CAPROVER_GIT_COMMIT_SHA}",
+    "RUN mkdir -p /usr/src/app",
+    "WORKDIR /usr/src/app",
+    "COPY ./package.json /usr/src/app/",
+    "COPY ./ /usr/src/app",
+    "RUN yarn install && yarn build",
+    "RUN yarn seed",
+    "ENV NODE_ENV staging",
+    "ENV PORT 80",
+    "ENV HOST_WEB 'http://localhost:5173'",
+    "EXPOSE 80",
+    "CMD [ \"yarn\", \"start:prod\" ]"
+  ]
+}
