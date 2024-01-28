@@ -11,7 +11,6 @@
     "COPY ./package.json /usr/src/app/",
     "COPY ./ /usr/src/app",
     "RUN yarn install && yarn build",
-    "RUN yarn seed",
     "ENV NODE_ENV staging",
     "ENV PORT 80",
     "ENV HOST_WEB 'http://localhost:5173'",
