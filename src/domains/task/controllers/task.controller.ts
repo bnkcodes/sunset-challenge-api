@@ -45,7 +45,7 @@ export class TaskController {
         title: query.title,
       },
       pagination: {
-        perPage: +query.perPage || 10,
+        perPage: +query.perPage || 6,
         page: +query.page || 1,
         sort: query.sort,
       },

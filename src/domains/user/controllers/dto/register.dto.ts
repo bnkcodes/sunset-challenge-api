@@ -1,4 +1,4 @@
-import { IsString, IsEmail, MinLength, IsNotEmpty, MaxLength, Validate } from 'class-validator'
+import { IsString, IsEmail, MinLength, IsNotEmpty, MaxLength, Validate, IsOptional } from 'class-validator'
 import { PasswordValidation } from 'class-validator-password-check'
 
 import { Match } from '@/shared/decorators/custom-validator.decorator'
@@ -15,7 +15,7 @@ export class RegisterDTO {
   @IsEmail({}, { message: 'O e-mail fornecido é inválido.' })
   email: string
 
-  @IsNotEmpty({ message: 'O campo telefone é obrigatório.' })
+  @IsOptional()
   @IsString({ message: 'O telefone fornecido é inválido.' })
   phone: string
 

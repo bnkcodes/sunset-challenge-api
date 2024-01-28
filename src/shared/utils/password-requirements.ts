@@ -6,7 +6,7 @@ export class PasswordRequirements {
   rules: PasswordValidationRequirement
 
   constructor() {
-    this.minLength = 6
+    this.minLength = 8
     this.maxLength = 20
     this.rules = {
       mustContainLowerLetter: true,

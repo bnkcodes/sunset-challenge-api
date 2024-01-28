@@ -35,9 +35,18 @@ export class GetAllService {
 
     const items = await this.columnRepository.findAll({
       where: query,
+      take: data.pagination.perPage,
+      skip: (data.pagination.page - 1) * data.pagination.perPage,
       orderBy: new ParseSort(data.pagination.sort).object(),
     })
 
-    return { items }
+    data.pagination.total = await this.columnRepository.count({
+      where: query,
+    })
+
+    return {
+      items,
+      pagination: { ...data.pagination },
+    }
   }
 }

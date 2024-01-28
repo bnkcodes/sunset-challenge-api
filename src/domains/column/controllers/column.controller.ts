@@ -44,6 +44,8 @@ export class ColumnController {
         name: query.name,
       },
       pagination: {
+        perPage: +query.perPage || 9,
+        page: +query.page || 1,
         sort: query.sort,
       },
     })
