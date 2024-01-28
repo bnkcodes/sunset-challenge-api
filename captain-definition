@@ -2,10 +2,6 @@
   "schemaVersion": 2,
   "dockerfileLines": [
     "FROM node:16.17.1-alpine",
-    "ARG POSTGRES_PRISMA_URL",
-    "ARG CAPROVER_GIT_COMMIT_SHA",
-    "ENV POSTGRES_PRISMA_URL ${POSTGRES_PRISMA_URL}",
-    "ENV CAPROVER_GIT_COMMIT_SHA ${CAPROVER_GIT_COMMIT_SHA}",
     "RUN mkdir -p /usr/src/app",
     "WORKDIR /usr/src/app",
     "COPY ./package.json /usr/src/app/",
