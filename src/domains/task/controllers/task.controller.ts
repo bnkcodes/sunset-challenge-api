@@ -65,7 +65,6 @@ export class TaskController {
 
   @Role(UserRole.USER)
   @Patch(':id/uncheck')
-  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Uncheck Task' })
   public async disable(@Param('id') id: string, @Authenticated() user: AuthenticatedPayload): Promise<Task | void> {
     return this.updateService.execute(
@@ -79,7 +78,6 @@ export class TaskController {
 
   @Role(UserRole.USER)
   @Patch(':id/done')
-  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Mark the task as done' })
   public async enable(@Param('id') id: string, @Authenticated() user: AuthenticatedPayload): Promise<Task | void> {
     return this.updateService.execute(
