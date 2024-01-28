@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "src/shared/infra/main.js",
+      "src": "./dist/src/shared/infra/main.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/shared/infra/main.ts"
+      "dest": "./dist/src/shared/infra/main.ts"
     }
   ]
 }
