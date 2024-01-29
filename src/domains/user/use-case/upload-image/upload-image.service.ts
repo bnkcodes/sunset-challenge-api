@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { User } from '@prisma/client'
 
 import { IStorageProvider } from '@/shared/providers/storage'
@@ -21,7 +21,7 @@ export class UploadImageService {
       id,
     })
 
-    if (!result) throw new BadRequestException(['Usuário não encontrado.'])
+    if (!result) throw new NotFoundException('Usuário não encontrado.')
 
     if (result.avatarUrl) {
       await this.storageProvider.deleteFile({

@@ -47,8 +47,17 @@ describe('Auth - Login use case', () => {
     jwtProvider = moduleRef.get(ITokenProvider)
   })
 
-  it('should return an error when the email or password is incorrect', async () => {
+  it('should return an error when the email not found', async () => {
     jest.spyOn(userRepository, 'findByUnique').mockResolvedValue()
+
+    const result = () => service.execute({ email: 'email', password: 'pass' })
+    const expected = new BadRequestException('Email ou senha estão incorretos.')
+
+    await expect(result).rejects.toThrow(expected)
+  })
+
+  it('should return an error when the password is incorrect', async () => {
+    jest.spyOn(userRepository, 'findByUnique').mockResolvedValue({ id: 'userId' } as any)
     jest.spyOn(cryptographyProvider, 'compare').mockResolvedValue(false)
 
     const result = () => service.execute({ email: 'email', password: 'pass' })

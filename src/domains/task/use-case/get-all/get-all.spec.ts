@@ -40,12 +40,12 @@ describe('Task - Get all use case', () => {
 
     const result = await service.execute({
       filter: { userId: 'userId', listId: 'listId' },
-      pagination: { perPage: 10, page: 1, sort: 'desc' },
+      pagination: { perPage: 6, page: 1, sort: 'desc' },
     })
 
     const expected = {
       items: [{ id: 'listId1' }, { id: 'listId2' }],
-      pagination: { perPage: 10, page: 1, sort: 'desc', total: 2 },
+      pagination: { perPage: 6, page: 1, sort: 'desc', total: 2 },
     }
 
     expect(result).toEqual(expected)

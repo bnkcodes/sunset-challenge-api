@@ -35,12 +35,19 @@ describe('List - Get all use case', () => {
   })
 
   it('should return successful', async () => {
-    const expected = [{ id: 'listId1' }, { id: 'listId2' }]
+    jest.spyOn(listRepository, 'findAll').mockResolvedValue([{ id: 'listId1' }, { id: 'listId2' }] as any)
+    jest.spyOn(listRepository, 'count').mockResolvedValue(2)
 
-    jest.spyOn(listRepository, 'findAll').mockResolvedValue(expected as any)
+    const result = await service.execute({
+      filter: { userId: 'userId' },
+      pagination: { perPage: 9, page: 1, sort: 'desc' },
+    })
 
-    const result = await service.execute({ filter: { userId: 'userId' }, pagination: { sort: 'desc' } })
+    const expected = {
+      items: [{ id: 'listId1' }, { id: 'listId2' }],
+      pagination: { perPage: 9, page: 1, sort: 'desc', total: 2 },
+    }
 
-    expect(result).toEqual({ items: expected })
+    expect(result).toEqual(expected)
   })
 })
