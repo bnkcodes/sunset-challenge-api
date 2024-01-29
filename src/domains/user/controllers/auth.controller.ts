@@ -18,7 +18,7 @@ export class AuthController {
   @Post('login')
   @AllowPublicAccess()
   @ApiOperation({ summary: 'Authenticate account' })
-  @ApiResponse({ status: 200, type: AuthUserResponseDTO })
+  @ApiResponse({ status: 201, type: AuthUserResponseDTO })
   public async login(@Body() authUserRequestDTO: AuthUserRequestDTO): Promise<LoginServiceOutput> {
     return this.loginService.execute(authUserRequestDTO)
   }

@@ -12,7 +12,7 @@ NestFactory.create(AppModule, { cors: true }).then(async (app) => {
     app,
     SwaggerModule.createDocument(
       app,
-      new DocumentBuilder().setTitle('Documentation').setVersion('1.0').addBearerAuth().build(),
+      new DocumentBuilder().setTitle('Sunset Challenge').setVersion('1.0').addBearerAuth().build(),
     ),
   )
 

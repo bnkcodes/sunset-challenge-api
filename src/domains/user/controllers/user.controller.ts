@@ -14,7 +14,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { User, UserRole } from '@prisma/client'
 
 import { Authenticated } from '@/shared/decorators/authenticated.decorator'
@@ -32,6 +32,7 @@ import { UpdateUserPasswordDTO } from './dto/update-user-password.dto'
 import { UpdateUserDTO, UpdateUserResponseDTO } from './dto/update-user.dto'
 import { UploadImageUserDTO } from './dto/upload-image-user.dto'
 
+@ApiBearerAuth()
 @ApiTags('Users')
 @Controller('users')
 export class UserController {

@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Put, Query } from '@nestjs/common'
-import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { Task, UserRole } from '@prisma/client'
 
 import { Authenticated } from '@/shared/decorators/authenticated.decorator'
@@ -10,10 +10,11 @@ import { CreateService } from '../use-case/create'
 import { DeleteService } from '../use-case/delete'
 import { GetAllService, GetAllServiceOutput } from '../use-case/get-all/get-all.service'
 import { UpdateService } from '../use-case/update'
-import { CreateDTO } from './dto/create.dto'
-import { GetAllDTO } from './dto/get-all.dto'
-import { UpdateDTO } from './dto/update.dto'
+import { CreateTaskDTO, CreateTaskResponseDTO } from './dto/create-task.dto'
+import { GetAllListResponseDTO, GetAllTaskDTO } from './dto/get-all-task.dto'
+import { UpdateTaskDTO, UpdateTaskResponseDTO } from './dto/update-task.dto'
 
+@ApiBearerAuth()
 @ApiTags('Tasks')
 @Controller('tasks')
 export class TaskController {
@@ -24,18 +25,23 @@ export class TaskController {
     private readonly getAllService: GetAllService,
   ) {}
 
-  @Role(UserRole.USER)
   @Post()
-  @ApiOperation({ summary: 'Create' })
-  public async register(@Body() body: CreateDTO, @Authenticated() user: AuthenticatedPayload): Promise<Task> {
-    return this.createService.execute(body, user.id)
+  @Role(UserRole.USER)
+  @ApiOperation({ summary: 'Create task for a list' })
+  @ApiResponse({ status: 201, type: CreateTaskResponseDTO })
+  public async register(
+    @Body() createTaskDTO: CreateTaskDTO,
+    @Authenticated() user: AuthenticatedPayload,
+  ): Promise<Task> {
+    return this.createService.execute(createTaskDTO, user.id)
   }
 
-  @Role(UserRole.USER)
   @Get()
-  @ApiOperation({ summary: 'Get all' })
+  @Role(UserRole.USER)
+  @ApiOperation({ summary: 'Get all task of a list' })
+  @ApiResponse({ status: 200, type: GetAllListResponseDTO })
   public async find(
-    @Query() query: GetAllDTO,
+    @Query() query: GetAllTaskDTO,
     @Authenticated() user: AuthenticatedPayload,
   ): Promise<GetAllServiceOutput> {
     return this.getAllService.execute({
@@ -52,20 +58,22 @@ export class TaskController {
     })
   }
 
-  @Role(UserRole.USER)
   @Put(':id')
-  @ApiOperation({ summary: 'Update' })
+  @Role(UserRole.USER)
+  @ApiOperation({ summary: 'Update a task by ID' })
+  @ApiResponse({ status: 200, type: UpdateTaskResponseDTO })
   public async update(
     @Param('id') id: string,
-    @Body() body: UpdateDTO,
+    @Body() updateTaskDTO: UpdateTaskDTO,
     @Authenticated() user: AuthenticatedPayload,
   ): Promise<Task | void> {
-    return this.updateService.execute({ id, userId: user.id }, body, user.role)
+    return this.updateService.execute({ id, userId: user.id }, updateTaskDTO, user.role)
   }
 
+  @Patch(':id/undone')
   @Role(UserRole.USER)
-  @Patch(':id/uncheck')
-  @ApiOperation({ summary: 'Uncheck Task' })
+  @ApiOperation({ summary: 'Undone a task by ID' })
+  @ApiResponse({ status: 200, type: UpdateTaskResponseDTO })
   public async disable(@Param('id') id: string, @Authenticated() user: AuthenticatedPayload): Promise<Task | void> {
     return this.updateService.execute(
       { id, userId: user.id },
@@ -76,9 +84,10 @@ export class TaskController {
     )
   }
 
-  @Role(UserRole.USER)
   @Patch(':id/done')
-  @ApiOperation({ summary: 'Mark the task as done' })
+  @Role(UserRole.USER)
+  @ApiOperation({ summary: 'Done a task by ID' })
+  @ApiResponse({ status: 200, type: UpdateTaskResponseDTO })
   public async enable(@Param('id') id: string, @Authenticated() user: AuthenticatedPayload): Promise<Task | void> {
     return this.updateService.execute(
       { id, userId: user.id },
@@ -89,10 +98,10 @@ export class TaskController {
     )
   }
 
-  @Role(UserRole.USER)
   @Delete(':id')
+  @Role(UserRole.USER)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Delete' })
+  @ApiOperation({ summary: 'Delete a task by ID' })
   public async delete(@Param('id') id: string, @Authenticated() user: AuthenticatedPayload): Promise<void> {
     return this.deleteService.execute({ id, userId: user.id }, user.role)
   }

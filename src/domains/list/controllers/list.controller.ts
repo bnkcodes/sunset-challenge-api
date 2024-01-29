@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query } from '@nestjs/common'
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { List, UserRole } from '@prisma/client'
 
 import { Authenticated } from '@/shared/decorators/authenticated.decorator'
@@ -14,6 +14,7 @@ import { CreateListDTO, CreateListResponseDTO } from './dto/create-list.dto'
 import { GetAllListDTO, GetAllListResponseDTO } from './dto/get-all-list.dto'
 import { UpdateListDTO, UpdateListResponseDTO } from './dto/update-list.dto'
 
+@ApiBearerAuth()
 @ApiTags('Lists')
 @Controller('lists')
 export class ListController {
@@ -24,8 +25,8 @@ export class ListController {
     private readonly getAllService: GetAllService,
   ) {}
 
-  @Role(UserRole.USER)
   @Post()
+  @Role(UserRole.USER)
   @ApiOperation({ summary: 'Create a list' })
   @ApiResponse({ status: 201, type: CreateListResponseDTO })
   public async register(
@@ -35,8 +36,8 @@ export class ListController {
     return this.createService.execute(createListDTO, user.id)
   }
 
-  @Role(UserRole.USER)
   @Get()
+  @Role(UserRole.USER)
   @ApiOperation({ summary: 'Get all authenticated user lists' })
   @ApiResponse({ status: 200, type: GetAllListResponseDTO })
   public async find(
@@ -56,8 +57,8 @@ export class ListController {
     })
   }
 
-  @Role(UserRole.USER)
   @Put(':id')
+  @Role(UserRole.USER)
   @ApiOperation({ summary: 'Update a list by ID' })
   @ApiResponse({ status: 200, type: UpdateListResponseDTO })
   public async update(
@@ -68,8 +69,8 @@ export class ListController {
     return this.updateService.execute({ id, userId: user.id }, updateListDTO, user.role)
   }
 
-  @Role(UserRole.USER)
   @Delete(':id')
+  @Role(UserRole.USER)
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete a list by ID' })
   public async delete(@Param('id') id: string, @Authenticated() user: AuthenticatedPayload): Promise<void> {
