@@ -4,7 +4,7 @@ import { List, Prisma } from '@prisma/client'
 import { PrismaRepository } from '@/domains/abstrations/repository/prisma/Repository'
 import { PrismaService } from '@/shared/infra/prisma/prisma.service'
 
-import { IListRepository } from '../interfaces/List.interface'
+import { IListRepository } from '../interfaces/list.interface'
 
 @Injectable()
 export class ListRepository
