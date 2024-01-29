@@ -1,4 +1,4 @@
-import { IsString, IsEmail, MinLength, IsNotEmpty, MaxLength, Validate, IsOptional } from 'class-validator'
+import { IsOptional, IsString, MaxLength, MinLength, Validate, ValidateIf } from 'class-validator'
 import { PasswordValidation } from 'class-validator-password-check'
 
 import { Match } from '@/shared/decorators/custom-validator.decorator'
@@ -6,20 +6,14 @@ import { PasswordRequirements } from '@/shared/utils/password-requirements'
 
 const passwordRequirements = new PasswordRequirements()
 
-export class RegisterDTO {
-  @IsNotEmpty({ message: 'O campo nome é obrigatório.' })
-  @IsString({ message: 'O campo nome é inválido.' })
-  name: string
-
-  @IsNotEmpty({ message: 'O campo e-mail é obrigatório.' })
-  @IsEmail({}, { message: 'O e-mail fornecido é inválido.' })
-  email: string
+export class UpdateUserPasswordDTO {
+  @ValidateIf(({ password }) => password !== undefined, {
+    message: 'Necessário informar a senha anterior para atualizar com a nova senha.',
+  })
+  @IsString({ message: 'O campo senha anterior é inválido.' })
+  oldPassword?: string
 
   @IsOptional()
-  @IsString({ message: 'O telefone fornecido é inválido.' })
-  phone: string
-
-  @IsNotEmpty({ message: 'O campo senha é obrigatório.' })
   @IsString({ message: 'O campo senha é inválido.' })
   @MinLength(passwordRequirements.minLength, {
     message: `O campo senha deve conter no mínimo ${passwordRequirements.minLength} caracteres.`,

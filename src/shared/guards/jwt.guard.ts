@@ -25,6 +25,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') implements IAuthGuard {
 
   handleRequest<Account extends AuthenticatedPayload>(_: Error, user: Account): Account {
     if (user) return user
-    else throw new UnauthorizedException(['Solicitação não autorizada.'])
+    else throw new UnauthorizedException('Você precisa estar logado para realizar esta ação.')
   }
 }

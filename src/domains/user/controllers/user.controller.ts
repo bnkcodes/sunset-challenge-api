@@ -14,7 +14,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { User, UserRole } from '@prisma/client'
 
 import { Authenticated } from '@/shared/decorators/authenticated.decorator'
@@ -27,8 +27,10 @@ import { GetByUniqueService } from '../use-case/get-by-unique'
 import { UpdateService } from '../use-case/update'
 import { UpdatePasswordService } from '../use-case/update-password'
 import { UploadImageService } from '../use-case/upload-image'
-import { UpdatePasswordDTO } from './dto/update-password.dto'
-import { UpdateDTO } from './dto/update.dto'
+import { GetMeUserResponseDTO } from './dto/get-me-user.dto'
+import { UpdateUserPasswordDTO } from './dto/update-user-password.dto'
+import { UpdateUserDTO, UpdateUserResponseDTO } from './dto/update-user.dto'
+import { UploadImageUserDTO } from './dto/upload-image-user.dto'
 
 @ApiTags('Users')
 @Controller('users')
@@ -42,49 +44,66 @@ export class UserController {
     private readonly deleteImageService: DeleteImageService,
   ) {}
 
-  @Role(UserRole.USER)
   @Get('me')
-  @ApiOperation({ summary: 'Get My User Data' })
+  @Role(UserRole.USER)
+  @ApiOperation({ summary: 'Get authenticated user data' })
+  @ApiResponse({ status: 200, type: GetMeUserResponseDTO })
   public async getMe(@Authenticated() user: AuthenticatedPayload): Promise<User> {
     return this.getByUniqueService.execute({ id: user.id })
   }
 
-  @Role(UserRole.USER)
   @Put('me')
-  @ApiOperation({ summary: 'Update My User' })
-  public async updateMe(@Body() body: UpdateDTO, @Authenticated() user: AuthenticatedPayload): Promise<User | void> {
-    return this.updateService.execute({ id: user.id }, body)
-  }
-
   @Role(UserRole.USER)
-  @Patch('me/update-password')
-  @ApiOperation({ summary: 'Update My Password' })
-  public async updateMyPassword(
-    @Body() body: UpdatePasswordDTO,
+  @ApiOperation({ summary: 'Update authenticated user data' })
+  @ApiResponse({ status: 200, type: UpdateUserResponseDTO })
+  public async updateMe(
+    @Body() updateUserDTO: UpdateUserDTO,
     @Authenticated() user: AuthenticatedPayload,
-  ): Promise<void> {
-    return this.updatePasswordService.execute({ id: user.id }, { ...body, skipPasswordValidation: false })
+  ): Promise<User | void> {
+    return this.updateService.execute({ id: user.id }, updateUserDTO)
   }
 
   @Role(UserRole.USER)
   @Delete('me')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Delete My Account' })
+  @ApiOperation({ summary: 'Delete authenticated user account' })
   public async delete(@Authenticated() user: AuthenticatedPayload): Promise<void> {
     return this.deleteService.execute({ id: user.id })
   }
 
   @Role(UserRole.USER)
+  @Patch('me/update-password')
+  @ApiOperation({ summary: 'Update authenticated user password' })
+  @ApiResponse({ status: 200, type: UpdateUserResponseDTO })
+  public async updateMyPassword(
+    @Body() updateUserPasswordDTO: UpdateUserPasswordDTO,
+    @Authenticated() user: AuthenticatedPayload,
+  ): Promise<void> {
+    return this.updatePasswordService.execute(
+      {
+        id: user.id,
+      },
+      {
+        ...updateUserPasswordDTO,
+        skipPasswordValidation: false,
+      },
+    )
+  }
+
   @Patch('me/upload-image')
-  @ApiOperation({ summary: 'Upload My Image' })
+  @Role(UserRole.USER)
+  @ApiOperation({ summary: 'Upload an photo for authenticated user' })
+  @ApiResponse({ status: 200, type: UpdateUserResponseDTO })
+  @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   public async uploadMyImage(
+    @Body() uploadImageUserDTO: UploadImageUserDTO,
     @Authenticated() user: AuthenticatedPayload,
     @UploadedFile(
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({ maxSize: 10 * 1000 * 1000 }),
-          new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
+          new FileTypeValidator({ fileType: 'image' }),
         ],
       }),
     )
@@ -98,7 +117,8 @@ export class UserController {
 
   @Role(UserRole.USER)
   @Patch('me/delete-image')
-  @ApiOperation({ summary: 'Delete My Image' })
+  @ApiOperation({ summary: 'Delete authenticated user photo' })
+  @ApiResponse({ status: 200, type: UpdateUserResponseDTO })
   public async deleteMyImage(@Authenticated() user: AuthenticatedPayload): Promise<User | void> {
     return await this.deleteImageService.execute({ id: user.id })
   }
