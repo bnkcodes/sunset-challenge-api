@@ -1,7 +1,7 @@
 export const taskData = () => ({
   id: 'taskId',
   userId: 'userId',
-  columnId: 'columnId',
+  listId: 'listId',
   title: 'taskTitle',
   description: 'taskDescription',
   isCompleted: false,

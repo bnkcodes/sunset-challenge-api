@@ -10,8 +10,8 @@ generator client {
 
 /// USER
 enum UserRole {
-  ADMIN
   USER
+  ADMIN
 
   @@map("user_roles")
 }
@@ -26,14 +26,14 @@ model User {
   avatarUrl String?   @map("avatar_url")
   role      UserRole? @default(USER)
 
-  columns Column[]
-  tasks   Task[]
+  lists List[]
+  tasks Task[]
 
   @@map("users")
 }
 
-/// COLUMN
-model Column {
+/// LIST
+model List {
   id String @id @default(uuid()) @db.Uuid
 
   userId String @map("user_id") @db.Uuid
@@ -47,15 +47,15 @@ model Column {
   user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   tasks Task[]
 
-  @@map("columns")
+  @@map("lists")
 }
 
 /// TASK
 model Task {
   id String @id @default(uuid()) @db.Uuid
 
-  userId   String @map("user_id") @db.Uuid
-  columnId String @map("column_id") @db.Uuid
+  userId String @map("user_id") @db.Uuid
+  listId String @map("list_id") @db.Uuid
 
   title       String
   description String?
@@ -64,8 +64,8 @@ model Task {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  column Column @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  list List @relation(fields: [listId], references: [id], onDelete: Cascade)
 
   @@map("tasks")
 }

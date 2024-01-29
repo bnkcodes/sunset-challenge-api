@@ -61,7 +61,7 @@ describe('Task - Update use case', () => {
     jest.spyOn(taskRepository, 'findByUnique').mockResolvedValue({ id: 'taskId' } as any)
     jest.spyOn(taskRepository, 'update').mockImplementation((_, input) => input as any)
 
-    const result = await service.execute({ id: 'columnId', userId: 'userId' }, taskStub, 'USER')
+    const result = await service.execute({ id: 'listId', userId: 'userId' }, taskStub, 'USER')
 
     expect(result).toEqual(taskStub)
   })

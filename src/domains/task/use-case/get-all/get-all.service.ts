@@ -8,7 +8,7 @@ import { ITaskRepository } from '../../interfaces/task.interface'
 
 export type GetAllServiceInput = {
   filter?: {
-    columnId: string
+    listId: string
     userId: string
     title?: string
   }
@@ -25,7 +25,7 @@ export class GetAllService {
   public async execute(data?: GetAllServiceInput): Promise<GetAllServiceOutput> {
     const query: Prisma.TaskWhereInput = {
       userId: data.filter.userId,
-      columnId: data.filter.columnId,
+      listId: data.filter.listId,
     }
 
     if (data?.filter?.title) {

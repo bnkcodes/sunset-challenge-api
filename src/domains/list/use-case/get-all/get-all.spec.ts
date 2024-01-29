@@ -5,13 +5,13 @@ import { Test } from '@nestjs/testing'
 import { EnvironmentVariables, EnvironmentVariablesSchema } from '@/config/env'
 import { PrismaService } from '@/shared/infra/prisma/prisma.service'
 
-import { IColumnRepository } from '../../interfaces/column.interface'
-import { ColumnRepository } from '../../repository/column.repository'
+import { IListRepository } from '../../interfaces/list.interface'
+import { ListRepository } from '../../repository/list.repository'
 import { GetAllService } from './get-all.service'
 
-describe('Column - Get all use case', () => {
+describe('List - Get all use case', () => {
   let service: GetAllService
-  let columnRepository: IColumnRepository
+  let listRepository: IListRepository
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -27,17 +27,17 @@ describe('Column - Get all use case', () => {
         }),
       ],
 
-      providers: [PrismaService, { provide: IColumnRepository, useClass: ColumnRepository }, GetAllService],
+      providers: [PrismaService, { provide: IListRepository, useClass: ListRepository }, GetAllService],
     }).compile()
 
     service = moduleRef.get(GetAllService)
-    columnRepository = moduleRef.get(IColumnRepository)
+    listRepository = moduleRef.get(IListRepository)
   })
 
   it('should return successful', async () => {
-    const expected = [{ id: 'columnId1' }, { id: 'columnId2' }]
+    const expected = [{ id: 'listId1' }, { id: 'listId2' }]
 
-    jest.spyOn(columnRepository, 'findAll').mockResolvedValue(expected as any)
+    jest.spyOn(listRepository, 'findAll').mockResolvedValue(expected as any)
 
     const result = await service.execute({ filter: { userId: 'userId' }, pagination: { sort: 'desc' } })
 

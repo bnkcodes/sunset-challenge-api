@@ -35,16 +35,16 @@ describe('Task - Get all use case', () => {
   })
 
   it('should return successful', async () => {
-    jest.spyOn(taskRepository, 'findAll').mockResolvedValue([{ id: 'columnId1' }, { id: 'columnId2' }] as any)
+    jest.spyOn(taskRepository, 'findAll').mockResolvedValue([{ id: 'listId1' }, { id: 'listId2' }] as any)
     jest.spyOn(taskRepository, 'count').mockResolvedValue(2)
 
     const result = await service.execute({
-      filter: { userId: 'userId', columnId: 'columnId' },
+      filter: { userId: 'userId', listId: 'listId' },
       pagination: { perPage: 10, page: 1, sort: 'desc' },
     })
 
     const expected = {
-      items: [{ id: 'columnId1' }, { id: 'columnId2' }],
+      items: [{ id: 'listId1' }, { id: 'listId2' }],
       pagination: { perPage: 10, page: 1, sort: 'desc', total: 2 },
     }
 

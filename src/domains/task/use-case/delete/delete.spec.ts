@@ -48,7 +48,7 @@ describe('Task - Delete use case', () => {
     jest.spyOn(taskRepository, 'findByUnique').mockResolvedValueOnce({ id: 'taskId' } as any)
     jest.spyOn(taskRepository, 'findByUnique').mockResolvedValueOnce(null)
 
-    const result = () => service.execute({ id: 'columnId', userId: 'userId' }, 'USER')
+    const result = () => service.execute({ id: 'listId', userId: 'userId' }, 'USER')
     const expected = new ForbiddenException('Você não possui permissão para isso.')
 
     await expect(result).rejects.toThrow(expected)

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
-import { Column, Prisma } from '@prisma/client'
+import { List, Prisma } from '@prisma/client'
 
 import { PaginateInterface } from '@/shared/interfaces/paginate.interface'
 import { ParseSort } from '@/shared/utils/parse-sort'
 
-import { IColumnRepository } from '../../interfaces/column.interface'
+import { IListRepository } from '../../interfaces/list.interface'
 
 export type GetAllServiceInput = {
   filter?: {
@@ -14,15 +14,15 @@ export type GetAllServiceInput = {
 } & PaginateInterface
 
 export type GetAllServiceOutput = {
-  items: Column[]
+  items: List[]
 } & PaginateInterface
 
 @Injectable()
 export class GetAllService {
-  constructor(private readonly columnRepository: IColumnRepository) {}
+  constructor(private readonly listRepository: IListRepository) {}
 
   public async execute(data?: GetAllServiceInput): Promise<GetAllServiceOutput> {
-    const query: Prisma.ColumnWhereInput = {
+    const query: Prisma.ListWhereInput = {
       userId: data.filter.userId,
     }
 
@@ -33,14 +33,14 @@ export class GetAllService {
       }
     }
 
-    const items = await this.columnRepository.findAll({
+    const items = await this.listRepository.findAll({
       where: query,
       take: data.pagination.perPage,
       skip: (data.pagination.page - 1) * data.pagination.perPage,
       orderBy: new ParseSort(data.pagination.sort).object(),
     })
 
-    data.pagination.total = await this.columnRepository.count({
+    data.pagination.total = await this.listRepository.count({
       where: query,
     })
 

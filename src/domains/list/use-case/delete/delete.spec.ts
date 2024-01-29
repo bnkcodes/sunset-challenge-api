@@ -6,13 +6,13 @@ import { Test } from '@nestjs/testing'
 import { EnvironmentVariables, EnvironmentVariablesSchema } from '@/config/env'
 import { PrismaService } from '@/shared/infra/prisma/prisma.service'
 
-import { IColumnRepository } from '../../interfaces/column.interface'
-import { ColumnRepository } from '../../repository/column.repository'
+import { IListRepository } from '../../interfaces/list.interface'
+import { ListRepository } from '../../repository/list.repository'
 import { DeleteService } from './delete.service'
 
-describe('Column - Delete use case', () => {
+describe('List - Delete use case', () => {
   let service: DeleteService
-  let columnRepository: IColumnRepository
+  let listRepository: IListRepository
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -28,37 +28,37 @@ describe('Column - Delete use case', () => {
         }),
       ],
 
-      providers: [PrismaService, { provide: IColumnRepository, useClass: ColumnRepository }, DeleteService],
+      providers: [PrismaService, { provide: IListRepository, useClass: ListRepository }, DeleteService],
     }).compile()
 
     service = moduleRef.get(DeleteService)
-    columnRepository = moduleRef.get(IColumnRepository)
+    listRepository = moduleRef.get(IListRepository)
   })
 
-  it('should return an error when the column is not found', async () => {
-    jest.spyOn(columnRepository, 'findByUnique').mockResolvedValue(null)
+  it('should return an error when the list is not found', async () => {
+    jest.spyOn(listRepository, 'findByUnique').mockResolvedValue(null)
 
-    const result = () => service.execute({ id: 'columnId' }, 'USER')
+    const result = () => service.execute({ id: 'listId' }, 'USER')
     const expected = new NotFoundException('Coluna não encontrada.')
 
     await expect(result).rejects.toThrow(expected)
   })
 
   it('should return an error when the document does not belong to the user', async () => {
-    jest.spyOn(columnRepository, 'findByUnique').mockResolvedValueOnce({ id: 'columnId' } as any)
-    jest.spyOn(columnRepository, 'findByUnique').mockResolvedValueOnce(null)
+    jest.spyOn(listRepository, 'findByUnique').mockResolvedValueOnce({ id: 'listId' } as any)
+    jest.spyOn(listRepository, 'findByUnique').mockResolvedValueOnce(null)
 
-    const result = () => service.execute({ id: 'columnId', userId: 'userId' }, 'USER')
+    const result = () => service.execute({ id: 'listId', userId: 'userId' }, 'USER')
     const expected = new ForbiddenException('Você não possui permissão para isso.')
 
     await expect(result).rejects.toThrow(expected)
   })
 
   it('should return successful deletion', async () => {
-    jest.spyOn(columnRepository, 'findByUnique').mockResolvedValue({ id: 'taskId' } as any)
-    jest.spyOn(columnRepository, 'delete').mockResolvedValue()
+    jest.spyOn(listRepository, 'findByUnique').mockResolvedValue({ id: 'taskId' } as any)
+    jest.spyOn(listRepository, 'delete').mockResolvedValue()
 
-    const result = await service.execute({ id: 'columnId', userId: 'userId' }, 'USER')
+    const result = await service.execute({ id: 'listId', userId: 'userId' }, 'USER')
 
     expect(result).toBeUndefined()
   })

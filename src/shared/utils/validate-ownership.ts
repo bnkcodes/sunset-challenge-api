@@ -1,6 +1,6 @@
 import { ForbiddenException } from '@nestjs/common'
 
-import { IColumnRepository } from '@/domains/column/interfaces/column.interface'
+import { IListRepository } from '@/domains/list/interfaces/list.interface'
 import { ITaskRepository } from '@/domains/task/interfaces/task.interface'
 
 /**
@@ -14,7 +14,7 @@ import { ITaskRepository } from '@/domains/task/interfaces/task.interface'
 export async function validateOwnership(
   requesterId: string,
   documentId: string,
-  repository: IColumnRepository | ITaskRepository,
+  repository: IListRepository | ITaskRepository,
 ) {
   const requesterHavePermission = await repository.findByUnique({
     id: documentId,

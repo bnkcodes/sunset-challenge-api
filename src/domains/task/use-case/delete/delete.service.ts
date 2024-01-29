@@ -9,7 +9,7 @@ import { ITaskRepository } from '../../interfaces/task.interface'
 export class DeleteService {
   constructor(private readonly taskRepository: ITaskRepository) {}
 
-  public async execute({ id, userId }: Prisma.ColumnWhereUniqueInput, userRole: UserRole): Promise<void> {
+  public async execute({ id, userId }: Prisma.ListWhereUniqueInput, userRole: UserRole): Promise<void> {
     const result = await this.taskRepository.findByUnique({ id })
 
     if (!result) throw new NotFoundException('Task não encontrada.')

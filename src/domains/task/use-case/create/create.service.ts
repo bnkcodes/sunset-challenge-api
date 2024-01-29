@@ -5,7 +5,7 @@ import { ITaskRepository } from '../../interfaces/task.interface'
 
 export type CreateServiceInput = {
   title: string
-  columnId: string
+  listId: string
   description?: string
 }
 
@@ -13,16 +13,16 @@ export type CreateServiceInput = {
 export class CreateService {
   constructor(private readonly taskRepository: ITaskRepository) {}
 
-  public async execute({ columnId, ...input }: CreateServiceInput, userId: string): Promise<Task> {
+  public async execute({ listId, ...input }: CreateServiceInput, userId: string): Promise<Task> {
     const payload: Prisma.TaskCreateInput = {
       user: {
         connect: {
           id: userId,
         },
       },
-      column: {
+      list: {
         connect: {
-          id: columnId,
+          id: listId,
         },
       },
       ...input,

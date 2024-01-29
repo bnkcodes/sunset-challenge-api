@@ -41,7 +41,7 @@ export class TaskController {
     return this.getAllService.execute({
       filter: {
         userId: user.id,
-        columnId: query.columnId,
+        listId: query.listId,
         title: query.title,
       },
       pagination: {

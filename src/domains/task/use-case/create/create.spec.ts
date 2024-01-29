@@ -40,7 +40,7 @@ describe('Task - Create use case', () => {
 
     jest.spyOn(taskRepository, 'create').mockResolvedValue(taskStub)
 
-    const result = await service.execute({ title: 'taskTitle', columnId: 'columnId' }, 'userId')
+    const result = await service.execute({ title: 'taskTitle', listId: 'listId' }, 'userId')
 
     expect(result).toEqual(taskStub)
   })
