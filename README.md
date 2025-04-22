@@ -203,6 +203,6 @@ This project is licensed under the MIT License - see the [LICENSE](../LICENSE) f
 
 ## 🔄 Navigation
 
-- [Back to Top](#sunset-challenge---backend-api)
-- [Root Documentation](../README.md)
-- [Frontend Documentation](../sunset-challenge-web/README.md)
+* [Back to Top](#sunset-challenge---backend-api)
+* [Root Documentation](https://github.com/brunownk/sunset-challenge)
+* [Frontend Documentation](https://github.com/brunownk/sunset-challenge-web)
