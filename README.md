@@ -1,73 +1,203 @@
+# Sunset Challenge - Backend API
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+  <img src="https://i.ibb.co/kch2SVb/sunset-logo.png" alt="Sunset Logo" width="200" />
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is the backend API for the Sunset Challenge, a todo list application with color customization features. This project was developed as part of a full-stack developer assessment for Sunset.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Technologies
 
-## Description
+- **Framework**: NestJS
+- **Language**: TypeScript
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: JWT with Passport
+- **API Documentation**: Swagger/OpenAPI
+- **Testing**: Jest
+- **Email**: SendGrid/Nodemailer
+- **Validation**: Class Validator, Joi
+- **Logging**: Winston
+- **Code Quality**: ESLint, Prettier, Husky
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📋 Features
 
-## Installation
+- RESTful API architecture
+- User authentication and authorization
+- Todo list management
+- Task management
+- Color customization for lists
+- Email notifications
+- API documentation
+- Unit and integration tests
+- Database migrations
+- Environment configuration
+- Request validation
+- Error handling
+- Logging system
 
+## 🛠️ Getting Started
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- Yarn package manager
+- PostgreSQL database
+- Docker and Docker Compose (optional)
+
+### Running with Docker (Recommended)
+
+1. Clone the repository:
 ```bash
-$ yarn install
+git clone https://github.com/brunownk/sunset-challenge.git
+cd sunset-challenge
 ```
 
-## Running the app
-
+2. Copy the environment files:
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+cp sunset-challenge-web/.env.example sunset-challenge-web/.env
+cp sunset-challenge-api/.env.example sunset-challenge-api/.env
 ```
 
-## Test
-
+3. Start the services:
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+docker-compose up -d
 ```
 
-## Support
+The API will be available at http://localhost:3000
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Running Locally
 
-## Stay in touch
+1. Clone the repository:
+```bash
+git clone https://github.com/brunownk/sunset-challenge-api.git
+cd sunset-challenge-api
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+2. Copy the environment file:
+```bash
+cp .env.example .env
+```
 
-## License
+3. Install dependencies:
+```bash
+yarn install
+```
 
-Nest is [MIT licensed](LICENSE).
+4. Set up the database:
+```bash
+yarn prisma generate
+yarn prisma migrate dev
+```
+
+5. Start the development server:
+```bash
+yarn start:dev
+```
+
+### Available Scripts
+
+- `yarn start:dev` - Start development server
+- `yarn build` - Build for production
+- `yarn start:prod` - Start production server
+- `yarn test` - Run tests
+- `yarn test:watch` - Run tests in watch mode
+- `yarn test:cov` - Run tests with coverage
+- `yarn lint` - Run ESLint
+- `yarn format` - Format code with Prettier
+
+## 📦 Project Structure
+
+```
+src/
+├── config/         # Application configuration
+├── domains/        # Domain-driven design modules
+│   ├── user/      # User domain
+│   ├── task/      # Task domain
+│   ├── list/      # List domain
+│   └── abstrations/ # Domain abstractions
+├── shared/         # Shared resources
+│   ├── decorators/# Custom decorators
+│   ├── dto/       # Data Transfer Objects
+│   ├── guards/    # Guards
+│   ├── infra/     # Infrastructure components
+│   ├── interfaces/# Interfaces
+│   ├── providers/ # Service providers
+│   ├── strategies/# Authentication strategies
+│   ├── types/     # TypeScript types
+│   └── utils/     # Utilities
+└── main.ts        # Application entry point
+```
+
+## 🗄️ Database Schema
+
+The application uses PostgreSQL with the following main entities:
+
+### Users
+- ID (UUID)
+- Name
+- Email
+- Password (hashed)
+- Role (USER/ADMIN)
+- Lists
+- Tasks
+
+### Lists
+- ID (UUID)
+- User ID
+- Name
+- Color
+- Created/Updated timestamps
+- Tasks
+
+### Tasks
+- ID (UUID)
+- User ID
+- List ID
+- Title
+- Description
+- Completion status
+- Created/Updated timestamps
+
+## 🔒 Authentication
+
+The API uses JWT-based authentication with the following features:
+- User registration
+- Email verification
+- Password reset
+- Role-based access control
+- Token refresh mechanism
+
+## 📝 API Documentation
+
+API documentation is available at `/api` when running the server. It includes:
+- Endpoint descriptions
+- Request/response schemas
+- Authentication requirements
+- Example requests
+
+## 🧪 Testing
+
+The project includes:
+- Unit tests
+- Integration tests
+- E2E tests
+- Test coverage reports
+- Mocked services
+
+## 🔒 Security
+
+- JWT authentication
+- Password hashing
+- Input validation
+- Rate limiting
+- CORS configuration
+- Environment variables
+- Secure headers
+
+## 🌐 Production URL
+
+The API is available at: [https://sunset-challenge-api.vercel.app](https://sunset-challenge-api.vercel.app)
+
+## 📝 License
+
+This project is part of the Sunset Challenge assessment.
