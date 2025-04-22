@@ -189,7 +189,6 @@ The project includes:
 - JWT authentication
 - Password hashing
 - Input validation
-- Rate limiting
 - CORS configuration
 - Environment variables
 - Secure headers
@@ -200,4 +199,10 @@ The API is available at: [https://sunset-challenge-api.vercel.app](https://sunse
 
 ## 📝 License
 
-This project is part of the Sunset Challenge assessment.
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
+
+## 🔄 Navigation
+
+- [Back to Top](#sunset-challenge---backend-api)
+- [Root Documentation](../README.md)
+- [Frontend Documentation](../sunset-challenge-web/README.md)
